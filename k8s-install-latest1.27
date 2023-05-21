@@ -65,12 +65,14 @@ sudo systemctl restart containerd
 ##With our container runtime installed and configured, we are ready to install Kubernetes.
 
 ##Add the repository key and the repository.
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-##Update your system and install the 3 Kubernetes modules.
-sudo apt update -y
-sudo apt install -y kubelet kubeadm kubectl
+cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
 
 ##Set up the firewall by installing the following rules on the master node:
 sudo ufw allow 6443/tcp
