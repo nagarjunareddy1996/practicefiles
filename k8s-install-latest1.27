@@ -1,3 +1,4 @@
+==========COMMON FOR MASTER & SLAVES START ====
 
 ####https://www.hostafrica.ng/blog/kubernetes/kubernetes-ubuntu-20-containerd/
 ##Step 1. Install containerd
@@ -10,14 +11,17 @@ cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
 EOF
+
 ###To allow iptables to see bridged traffic, as required by Kubernetes, we need to set the values of certain fields to 1.
 sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 EOF
+
 ###Apply the new settings without restarting.
 sudo sysctl –system
+
 ###Install curl.
 sudo apt install curl -y
 
@@ -57,13 +61,6 @@ sudo vi /etc/containerd/config.toml
 ##Finally, to apply these changes, we need to restart containerd.
 sudo systemctl restart containerd
 
-##To check that containerd is indeed running, use this command:
-
-##ps -ef | grep containerd
-Expect output similar to this:
-
-root       63087       1  0 13:16 ?        00:00:00 /usr/bin/containerd
-##
 ###Step 2. Install Kubernetes
 ##With our container runtime installed and configured, we are ready to install Kubernetes.
 
@@ -74,20 +71,6 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt
 ##Update your system and install the 3 Kubernetes modules.
 sudo apt update -y
 sudo apt install -y kubelet kubeadm kubectl
-
-##Set the appropriate hostname for each machine.
-sudo hostnamectl set-hostname "master-node"
-
-#exec bash
-#And on the worker node:
-
-sudo hostnamectl set-hostname "worker-node"
-#exec bash
-#Add the new hostnames to the /etc/hosts file on both servers.
-sudo vi /etc/hosts
-160.129.148.40 master-node
-153.139.228.122 node1 worker-node
-#Remember to replace the IPs with those of your systems.
 
 ##Set up the firewall by installing the following rules on the master node:
 sudo ufw allow 6443/tcp
@@ -110,29 +93,63 @@ sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ##Finally, enable the kubelet service on both systems so we can start it.
 sudo systemctl enable kubelet
 
+==========COMMON FOR MASTER & SLAVES END=====
+
+===========In Master Node Start====================
 ##Step 3. Setting up the cluster
-##With our container runtime and Kubernetes modules installed, we are ready to initialize our Kubernetes cluster.
+# Steps Only For Kubernetes Master
+
+# Switch to the root user.
+
+sudo su -
 
 ##Run the following command on the master node to allow Kubernetes to fetch the required images before cluster initialization:
-sudo kubeadm config images pull
+ kubeadm config images pull
 
 ##Initialize the cluster
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+ kubeadm init --pod-network-cidr=10.244.0.0/16
 
+#exit root user & exeucte as normal user
+exit
 
-sudo kubeadm token create --print-join-command
 Now create a folder to house the Kubernetes configuration in the home directory. We also need to set up the required permissions for the directory, and export the KUBECONFIG variable.
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-##Deploy a pod network to our cluster. This is required to interconnect the different Kubernetes components.
+#You will notice from the previous command, that all the pods are running except one: ‘kube-dns’. For resolving this we will install a # pod network. To install the weave pod network, run the following command:
+#Deploy a pod network to our cluster. This is required to interconnect the different Kubernetes components.
 kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
 
+# Get token
+
+kubeadm token create --print-join-command
+
+=========In Master Node End====================
+Add Worker Machines to Kubernates Master
+=========================================
+
+Copy kubeadm join token from and execute in Worker Nodes to join to cluster
+
+
+
+kubectl commonds has to be executed in master machine.
+
+Check Nodes
+=============
+
 kubectl get nodes
 
-Run kubectl get nodes on the control-plane to see this node join the cluster.
 
-If you go back to the master node, you should now be able to see the worker node in the output of the get nodes command.
-kubectl get nodes
+Deploy Sample Application
+==========================
+
+kubectl run nginx-demo --image=nginx --port=80
+
+kubectl expose deployment nginx-demo --port=80 --type=NodePort
+
+
+Get Node Port details
+=====================
+kubectl get services
 
