@@ -20,7 +20,7 @@ net.ipv4.ip_forward = 1
 EOF
 
 ###Apply the new settings without restarting.
-sudo sysctl –system
+sudo sysctl --system
 
 ###Install curl.
 sudo apt install curl -y
