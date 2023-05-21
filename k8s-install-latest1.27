@@ -119,6 +119,9 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 #You will notice from the previous command, that all the pods are running except one: ‘kube-dns’. For resolving this we will install a # pod network. To install the weave pod network, run the following command:
 #Deploy a pod network to our cluster. This is required to interconnect the different Kubernetes components.
+
+Note: to install flannel network we musk use the cidr block 10.244.0.0/16 while init cluster
+
 kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
 
 # Get token
