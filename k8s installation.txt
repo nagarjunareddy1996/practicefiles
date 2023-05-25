@@ -1,5 +1,8 @@
 Note: Open Required Ports In AWS Security Groups. For now we will open All trafic.
 
+Note: if we get local dns resolve issue in aws ubuntu k8s master node( curl is not working with kubernetes local dns like svc.cluster.local)
+go the AWS console and enable the option "Answer RBN DNS hostname IPv4" in subnet actions of the ec2 machine associated.
+
 ==========COMMON FOR MASTER & SLAVES START ====
 
 # First, login as ‘root’ user because the following set of commands need to be executed with ‘sudo’ permissions.
