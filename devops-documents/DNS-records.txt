@@ -1,0 +1,25 @@
+Practical DevOps: 𝗗𝗡𝗦 𝗿𝗲𝗰𝗼𝗿𝗱𝘀 real-world examples 🚀
+
+I learned most of the DNS record concepts practically by setting up my own websites, mail servers, etc.
+
+The image shows the DNS records I use for one of my blogs.
+
+Let's have a look at what each record means
+
+➡️ 𝗔 𝗥𝗲𝗰𝗼𝗿𝗱: This record maps a domain name to an IP address. In my case, IP address of the ec2 server where the blog is hosted is added as A record. When a user enters the domain name in their web browser, the browser uses the DNS system to look up the corresponding IP address and then connects to the server at that address.
+
+➡️ 𝗖𝗡𝗔𝗠𝗘 (𝗖𝗮𝗻𝗼𝗻𝗶𝗰𝗮𝗹 𝗡𝗮𝗺𝗲)Used to alias one domain name to another. It always points to another domain, not an IP address. In my case, I use CNAME for a subdomain “WWW” as well as an Amazon SES DKIM verification record. You always use a CNAME record if you want to create subdomains for a domain name.
+
+➡️ 𝗠𝗫 (𝗠𝗮𝗶𝗹 𝗘𝘅𝗰𝗵𝗮𝗻𝗴𝗲): This record holds the mail server details for the domain. In my case, I use two mail servers. Zoho for mailbox to receive emails in custom email id ex: contact@devopscube[.]com. AWS SES mail server for signup autoresponder and email marketing services.
+
+➡️ 𝗧𝗫𝗧 (𝗧𝗲𝘅𝘁): A type of DNS record that allows you to associate text information with a domain name. In my case, I use that record for domain verification with Zoho, SES, Google Search Console, etc. Also, I have added 𝗱𝗺𝗮𝗿𝗰, 𝘀𝗽𝗳 𝗮𝗻𝗱 𝗗𝗞𝗜𝗠 information given by Zoho and AWS SES. These records are part of the TXT content and are very important for email deliverability.
+
+➡️ 𝗦𝗣𝗙 (𝗦𝗲𝗻𝗱𝗲𝗿 𝗣𝗼𝗹𝗶𝗰𝘆 𝗙𝗿𝗮𝗺𝗲𝘄𝗼𝗿𝗸): A record that specifies which mail servers are authorized to send an email on behalf of a particular domain. You get this SPF information from the mail exchange services like Zoho or AWS SES to be added as a TXT record.
+
+What if you don't add an SPF record?
+
+When you try to send an email from your domain email address to another email, the recipient mail servers (eg Gmail) use SPF to confirm that you are legitimate and were sent from servers that are authorized by you for your domain. If you don't have an SPF, there is a higher chance that emails originating from your domain will be classified as spam by receiving mail servers.
+
+➡️ 𝗗𝗞𝗜𝗠 (𝗗𝗼𝗺𝗮𝗶𝗻𝗞𝗲𝘆𝘀 𝗜𝗱𝗲𝗻𝘁𝗶𝗳𝗶𝗲𝗱 𝗠𝗮𝗶𝗹): A type of email authentication that allows the recipient of an email to check that it was actually sent by the domain it claims to be sent from and that it has not been modified in transit.
+
+➡️ 𝗗𝗠𝗔𝗥𝗖 (𝗗𝗼𝗺𝗮𝗶𝗻-𝗯𝗮𝘀𝗲𝗱 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗔𝘂𝘁𝗵𝗲𝗻𝘁𝗶𝗰𝗮𝘁𝗶𝗼𝗻, 𝗥𝗲𝗽𝗼𝗿𝘁𝗶𝗻𝗴 & 𝗖𝗼𝗻𝗳𝗼𝗿𝗺𝗮𝗻𝗰𝗲): This record gives domain owners control over what happens when an email message fails authentication. This means that if the recipient mail server cannot verify the identity of the sender, the DMARC record specifies what action the recipient server should take.
