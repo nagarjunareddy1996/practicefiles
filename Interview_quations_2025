@@ -1,0 +1,21 @@
+What is salting HMAC in aws s3;
+how to remove taints in k8s?
+kubectl command to schedule a cronjob ?
+If i have crated multiple security groups with terrform single state file nopw i want to splity state file into mulriple for each sg how to do ?
+Terrform code to pull latest ami with filter?
+answer: data "aws_ami" "amazon_linux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["amazon"] # Amazon-owned AMIs
+}
+
