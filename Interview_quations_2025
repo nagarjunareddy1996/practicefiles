@@ -18,5 +18,16 @@
     
       owners = ["amazon"] # Amazon-owned AMIs
     }
+6. can we attach target group to auto scaling group 
+ans: no
+7. what is cname , a record and aaaa record?
+c name: used to map sub domains to dimain
+a name: map ipv4 adress to domain
+aaaa name: map ip6 adress to domain
 
+8. can we attach multiple sg to load balancer?
+yes , we can attach upto 5
+
+9. when creating secret we need to pass base64 values in data or else we need use 
+stringData instead of data field.
 
