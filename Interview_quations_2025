@@ -19,7 +19,7 @@
       owners = ["amazon"] # Amazon-owned AMIs
     }
 6. can we attach target group to auto scaling group 
-ans: no
+ans: yes
 7. what is cname , a record and aaaa record?
 c name: used to map sub domains to dimain
 a name: map ipv4 adress to domain
