@@ -31,3 +31,4 @@ yes , we can attach upto 5
 9. when creating secret we need to pass base64 values in data or else we need use 
 stringData instead of data field.
 
+SRE book from google - https://sre.google/workbook/table-of-contents/
