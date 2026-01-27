@@ -1,0 +1,5 @@
+local ephermal storage concept - https://kubernetes.io/blog/2022/09/19/local-storage-capacity-isolation-ga/
+tofu controler - https://flux-iac.github.io/tofu-controller/
+taerraform bootstrapping 
+optional configmap for k8s pods
+clusternet to mange the multiple clusters
